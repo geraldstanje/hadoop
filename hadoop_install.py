@@ -6,7 +6,10 @@ import re
 import sys
 import commands
 
-# run pi example
+hdfs_path = "/Users/geraldstanje/Documents/" # dont forget the / at the end
+hdfs_dir = "hdfstmp"
+
+# install hadoop
 os.system("install hadoop...")
 os.system("sleep 2")
 
@@ -57,3 +60,29 @@ fh.close()
 
 # refresh env vars in current shell
 os.system("source " + home_dir + "/.profile")
+
+# create hdfs dir
+os.system("mkdir -p" + hdfs_path + hdfs_dir)
+
+# copy the property files (stored in config) to /usr/local/Cellar/hadoop/2.3.0/libexec/etc/hadoop
+# copy core-site.xml
+os.system("cp ./config/core-site.xml $HADOOP_HOME/libexec/etc/hadoop")
+# copy yarn-site.xml
+os.system("cp ./config/yarn-site.xml $HADOOP_HOME/libexec/etc/hadoop")
+# copy mapred-site.xml
+os.system("cp ./config/mapred-site.xml $HADOOP_HOME/libexec/etc/hadoop")
+# copy hdfs-site.xml
+os.system("cp ./config/hdfs-site.xml $HADOOP_HOME/libexec/etc/hadoop")
+
+# create two directories which will contain the namenode and the datanode for this Hadoop installation
+os.system("mkdir -p " + hdfs_path + hdfs_dir + "/namenode")
+os.system("mkdir -p " + hdfs_path + hdfs_dir + "/datanode")
+
+# format the New Hadoop Filesystem
+os.system("hdfs namenode -format")
+
+# start hadoop
+os.system("$HADOOP_HOME/sbin/start-dfs.sh")
+
+# show functional instance of Hadoop running on your VPS
+os.system("jps")
