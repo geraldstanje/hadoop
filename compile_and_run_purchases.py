@@ -29,7 +29,7 @@ os.system("hdfs dfs -copyFromLocal data/purchases.txt in") # copy file to the in
 #
 # run purchase example
 #
-os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file mapper.py -mapper mapper.py -file reducer.py -reducer reducer.py -input in -output output")
+os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file src/mapper.py -mapper src/mapper.py -file src/reducer.py -reducer src/reducer.py -input in -output output")
 
 #
 # print the mapreduce results, should show a table with word/counts
