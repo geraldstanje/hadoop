@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+# hadoop install script for mac osx
 import os
 import re
 import sys
