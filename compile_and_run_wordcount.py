@@ -19,12 +19,9 @@ os.system("hdfs dfs -rm -r in")
 os.system("hdfs dfs -mkdir in")
 
 #
-# download words file and unzip it
+# copy gutenberg text file to hadoop dir
 #
-os.system("wget http://www.gutenberg.org/files/4300/4300.zip")
-os.system("unzip 4300.zip")
-os.system("rm 4300.zip")
-os.system("hdfs dfs -copyFromLocal /Users/geraldstanje/Downloads/4300.txt in") # copy file to the in directory
+os.system("hdfs dfs -copyFromLocal /data/4300.txt in") # copy file to the in directory, text file is from: http://www.gutenberg.org/files/4300/4300.zip
 
 #
 # compile WordCount.java with the javac compiler
