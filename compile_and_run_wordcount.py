@@ -21,6 +21,7 @@ os.system("hdfs dfs -mkdir in")
 #
 # copy gutenberg text file to hadoop dir
 #
+os.system("unzip /data/4300.zip")
 os.system("hdfs dfs -copyFromLocal /data/4300.txt in") # copy file to the in directory, text file is from: http://www.gutenberg.org/files/4300/4300.zip
 
 #
