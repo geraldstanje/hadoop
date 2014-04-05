@@ -23,7 +23,7 @@ os.system("hdfs dfs -mkdir in")
 #
 # copy purchases text file to hadoop dir
 #
-os.system("gunzip data/purchases.txt.gz")
+os.system("gzip -d -k data/purchases.txt.gz")
 os.system("hdfs dfs -copyFromLocal data/purchases.txt in") # copy file to the in directory, text file is from: http://content.udacity-data.com/courses/ud617/purchases.txt.gz
 
 #

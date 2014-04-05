@@ -27,6 +27,7 @@ os.system("hdfs dfs -copyFromLocal data/4300.txt in") # copy file to the in dire
 #
 # compile WordCount.java with the javac compiler
 #
+os.system("mkdir src/wordcount_classes")
 os.system("javac -classpath $HADOOP_HOME/libexec/share/hadoop/common/hadoop-common-2.3.0.jar:$HADOOP_HOME/libexec/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.3.0.jar:$HADOOP_HOME/libexec/share/hadoop/common/lib/commons-cli-1.2.jar -d src/wordcount_classes src/WordCount.java")
 
 #
