@@ -49,8 +49,9 @@ env_variables = [["JAVA_HOME", "/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/C
                  ["HADOOP_HOME", "/usr/local/Cellar/hadoop/" + hadoop_version]
                 ]
 
-# TODO: does not work
+#
 # write env vars and replace hadoop paths
+#
 if hadoop_env_set == 0:
     fh = open(home_dir + "/.profile","a")    
     for env in env_variables:
@@ -66,11 +67,33 @@ os.system("mkdir -p" + hdfs_path + hdfs_dir)
 #
 # copy the property files (stored in config) to /usr/local/Cellar/hadoop/2.3.0/libexec/etc/hadoop
 #
-HADOOP_HOME_TMP = "/usr/local/Cellar/hadoop/"
-os.system("cp ./config/core-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
-os.system("cp ./config/yarn-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
-os.system("cp ./config/mapred-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
-os.system("cp ./config/hdfs-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
+HADOOP_HOME_TMP = "/usr/local/Cellar/hadoop/" + hadoop_version
+os.system("cp ./config/core-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
+os.system("cp ./config/yarn-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
+os.system("cp ./config/mapred-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
+os.system("cp ./config/hdfs-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
+
+#
+# modify the namenode and data node path in the hdfs-site.xml file
+#
+array = []
+fh = open(HADOOP_HOME_TMP + "/libexec/etc/hadoop/hdfs-site.xml","r")
+for line in fh:
+    found1 = line.find("<value>file:/Users/geraldstanje/Documents/hdfstmp/namenode</value>")
+    found2 = line.find("<value>file:/Users/geraldstanje/Documents/hdfstmp/datanode</value>")
+    
+    if found1 != -1:
+        array.append("\t\t<value>file:" + hdfs_path + hdfs_dir + "/nnamenode</value>" + "\n")
+    elif found2 != -1:
+        array.append("\t\t<value>file:" + hdfs_path + hdfs_dir + "/ddatanode</value>" + "\n")
+    else:
+        array.append(line)    
+fh.close()
+
+fh = open(HADOOP_HOME_TMP + "/libexec/etc/hadoop/hdfs-site.xml","w")    
+for line in array:
+    fh.write(line)
+fh.close()
 
 #
 # create two directories which will contain the namenode and the datanode for this hadoop installation
