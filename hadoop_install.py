@@ -5,15 +5,17 @@
 # make sure that brew installs hadoop 2.3.0
 # i use java version: 1.8.0
 # IMPORTANT: Make sure that you turn on remote login under system preferences then file sharing
+# tutorial: http://www.linkedin.com/groups/How-learn-hadoop-762547.S.5845829474339282945?qid=cd795b39-0ceb-4083-a525-6992bf49f89b&trk=groups_guest_most_popular-0-b-cmr&goback=.gmp_762547
 #
 
 import os
 import re
 import sys
 import commands
-
+    
 hdfs_path = "/Users/geraldstanje/Documents/" # dont forget the / at the end
 hdfs_dir = "hdfstmp"
+hadoop_version = "2.3.0" # TODO: we should extract that somehow from brew install...
 
 #
 # install hadoop
@@ -21,55 +23,40 @@ hdfs_dir = "hdfstmp"
 os.system("install hadoop...")
 os.system("sleep 2")
 
+#
 # install hadoop using brew
+#
 os.system("brew install hadoop")
 
 #
 # set env vars for hadoop
 #
-array = []
-env_vars_find = ["export JAVA_HOME", "export HADOOP_HOME", "export PATH=$PATH:$HADOOP_HOME/bin\n", "export PATH=$PATH:$HADOOP_HOME/sbin\n"]
-env_vars_repl = ["export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home\n", "export HADOOP_HOME=/usr/local/Cellar/hadoop/2.3.0\n", "export PATH=$PATH:$HADOOP_HOME/bin\n", "export PATH=$PATH:$HADOOP_INSTALL/sbin\n"]
-env_vars_found = [0, 0, 0, 0]
-
+hadoop_env_set = 0
 status, home_dir = commands.getstatusoutput("echo ~")
 
 # read env vars
-with open(home_dir + "/.profile", "r") as f:
-    for line in f:
-        count = 0
-        env_var_lookup = 0
+fh = open(home_dir + "/.profile","r")
+for line in fh:
+    found = line.find("HADOOP_HOME")
         
-        for env in env_vars_find:
-            found = line.find(env)
+    if found != -1:
+        hadoop_env_set = 1
             
-            if found != -1:
-                env_vars_found[count] = 1
-                env_var_lookup = 1
-                array.append(env_vars_repl[count])
-            
-            count = count + 1
-        
-        if env_var_lookup == 0:
-            array.append(line)
-            
-    f.close()
-
-# write env vars and replace hadoop paths
-fh = open(home_dir + "/.profile","w")   
-for item in array:
-    fh.write(item)
-
-count = 0
-for env in env_vars_found:
-    if env == 0:
-        fh.write(env_vars_repl[count])
-    count = count + 1
-
 fh.close()
 
-# refresh env vars in current shell
-os.system("source " + home_dir + "/.profile")
+# set env_variables array
+env_variables = [["JAVA_HOME", "/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home"],
+                 ["HADOOP_HOME", "/usr/local/Cellar/hadoop/" + hadoop_version]
+                ]
+
+# TODO: does not work
+# write env vars and replace hadoop paths
+if hadoop_env_set == 0:
+    fh = open(home_dir + "/.profile","a")    
+    for env in env_variables:
+        fh.write("export " + env[0] + "=" + env[1] + "\n")
+        print 'export %s="%s"' % (env[0], env[1])
+    fh.close()
 
 #
 # create hdfs dir
@@ -79,10 +66,11 @@ os.system("mkdir -p" + hdfs_path + hdfs_dir)
 #
 # copy the property files (stored in config) to /usr/local/Cellar/hadoop/2.3.0/libexec/etc/hadoop
 #
-os.system("cp ./config/core-site.xml $HADOOP_HOME/libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
-os.system("cp ./config/yarn-site.xml $HADOOP_HOME/libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
-os.system("cp ./config/mapred-site.xml $HADOOP_HOME/libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
-os.system("cp ./config/hdfs-site.xml $HADOOP_HOME/libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
+HADOOP_HOME_TMP = "/usr/local/Cellar/hadoop/"
+os.system("cp ./config/core-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
+os.system("cp ./config/yarn-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
+os.system("cp ./config/mapred-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
+os.system("cp ./config/hdfs-site.xml " + HADOOP_HOME_TMP + "libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
 
 #
 # create two directories which will contain the namenode and the datanode for this hadoop installation
@@ -96,11 +84,19 @@ os.system("mkdir -p " + hdfs_path + hdfs_dir + "/datanode")
 os.system("hdfs namenode -format")
 
 #
-# start hadoop
+# start hadoop service
 #
 os.system("$HADOOP_HOME/sbin/start-dfs.sh")
+os.system("$HADOOP_HOME/sbin/start-yarn.sh")
 
 #
 # show functional instance of Hadoop running on your VPS
 #
 os.system("jps")
+#If everything is sucessful, you should see following services running
+#2583 DataNode
+#2970 ResourceManager
+#3461 Jps
+#3177 NodeManager
+#2361 NameNode
+#2840 SecondaryNameNode
