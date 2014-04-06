@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 #
-# this is a hadoop install script for mac osx
+# this is a hadoop 2.3.0 install script for mac osx
+# make sure that brew installs hadoop 2.3.0
+# i use java version: 1.8.0
 # IMPORTANT: Make sure that you turn on remote login under system preferences then file sharing
 #
 
@@ -26,8 +28,8 @@ os.system("brew install hadoop")
 # set env vars for hadoop
 #
 array = []
-env_vars_find = ["export JAVA_HOME", "export HADOOP_HOME", "export PATH=$PATH:$HADOOP_INSTALL/bin\n", "export PATH=$PATH:$HADOOP_INSTALL/sbin\n"]
-env_vars_repl = ["export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home\n", "export HADOOP_HOME=/usr/local/Cellar/hadoop/2.3.0\n", "export PATH=$PATH:$HADOOP_INSTALL/bin\n", "export PATH=$PATH:$HADOOP_INSTALL/sbin\n"]
+env_vars_find = ["export JAVA_HOME", "export HADOOP_HOME", "export PATH=$PATH:$HADOOP_HOME/bin\n", "export PATH=$PATH:$HADOOP_HOME/sbin\n"]
+env_vars_repl = ["export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home\n", "export HADOOP_HOME=/usr/local/Cellar/hadoop/2.3.0\n", "export PATH=$PATH:$HADOOP_HOME/bin\n", "export PATH=$PATH:$HADOOP_INSTALL/sbin\n"]
 env_vars_found = [0, 0, 0, 0]
 
 status, home_dir = commands.getstatusoutput("echo ~")
