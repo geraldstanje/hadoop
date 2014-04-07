@@ -67,17 +67,17 @@ os.system("mkdir -p" + hdfs_path + hdfs_dir)
 #
 # copy the property files (stored in config) to /usr/local/Cellar/hadoop/2.3.0/libexec/etc/hadoop
 #
-HADOOP_HOME_TMP = "/usr/local/Cellar/hadoop/" + hadoop_version
-os.system("cp ./config/core-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
-os.system("cp ./config/yarn-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
-os.system("cp ./config/mapred-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
-os.system("cp ./config/hdfs-site.xml " + HADOOP_HOME_TMP + "/libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
+HADOOP_HOME_DIR = "/usr/local/Cellar/hadoop/" + hadoop_version
+os.system("cp ./config/core-site.xml " + HADOOP_HOME_DIR + "/libexec/etc/hadoop") # copy core-site.xml from config folder to hadoop path
+os.system("cp ./config/yarn-site.xml " + HADOOP_HOME_DIR + "/libexec/etc/hadoop") # copy yarn-site.xml from config folder to hadoop path
+os.system("cp ./config/mapred-site.xml " + HADOOP_HOME_DIR + "/libexec/etc/hadoop") # copy mapred-site.xml from config folder to hadoop path
+os.system("cp ./config/hdfs-site.xml " + HADOOP_HOME_DIR + "/libexec/etc/hadoop") # copy hdfs-site.xml from config folder to hadoop path
 
 #
 # modify the namenode and data node path in the hdfs-site.xml file
 #
 array = []
-fh = open(HADOOP_HOME_TMP + "/libexec/etc/hadoop/hdfs-site.xml","r")
+fh = open(HADOOP_HOME_DIR + "/libexec/etc/hadoop/hdfs-site.xml","r")
 for line in fh:
     found1 = line.find("<value>file:/Users/geraldstanje/Documents/hdfstmp/namenode</value>")
     found2 = line.find("<value>file:/Users/geraldstanje/Documents/hdfstmp/datanode</value>")
@@ -90,7 +90,7 @@ for line in fh:
         array.append(line)    
 fh.close()
 
-fh = open(HADOOP_HOME_TMP + "/libexec/etc/hadoop/hdfs-site.xml","w")    
+fh = open(HADOOP_HOME_DIR + "/libexec/etc/hadoop/hdfs-site.xml","w")    
 for line in array:
     fh.write(line)
 fh.close()
