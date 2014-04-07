@@ -10,10 +10,10 @@ os.system("echo 'start purchase example...'")
 os.system("sleep 2")
 
 #
-# delete directory in and output
+# delete in and out directory from hdfs
 #
 os.system("hdfs dfs -rm -r in")
-os.system("hdfs dfs -rm -r output")
+os.system("hdfs dfs -rm -r out")
 
 #
 # create the in directory in the hdfs path
@@ -29,12 +29,12 @@ os.system("hdfs dfs -copyFromLocal data/purchases.txt in") # copy file to the in
 #
 # run purchase example
 #
-os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file src/mapper_purchases.py -mapper src/mapper_purchases.py -file src/reducer_purchases.py -reducer src/reducer_purchases.py -input in -output output")
+os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file src/mapper_purchases.py -mapper src/mapper_purchases.py -file src/reducer_purchases.py -reducer src/reducer_purchases.py -input in -output out")
 
 #
 # print the mapreduce results, should show a table with word/counts
 #
-os.system("hdfs dfs -cat output/part-00000 | tail -10")
+os.system("hdfs dfs -cat out/part-00000 | tail -10")
 
 #
 # open hadoop monitoring system

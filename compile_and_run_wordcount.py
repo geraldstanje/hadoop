@@ -9,9 +9,10 @@ os.system("echo 'start wordcount example...'")
 os.system("sleep 2")
 
 #
-# delete files in directory in
+# delete in and out directory from hdfs
 #
 os.system("hdfs dfs -rm -r in")
+os.system("hdfs dfs -rm -r out")
 
 #
 # create the in directory in the hdfs path
@@ -36,19 +37,14 @@ os.system("javac -classpath $HADOOP_HOME/libexec/share/hadoop/common/hadoop-comm
 os.system("jar -cvf src/wordcount.jar -C src/wordcount_classes/ .")
 
 #
-# delete all files in output dir
-#
-os.system("hdfs dfs -rm -r output")
-
-#
 # run the hadoop mapreduce job with wordcount.jar
 #
-os.system("hadoop jar src/wordcount.jar org/apache/hadoop/mapred/WordCount in output")
+os.system("hadoop jar src/wordcount.jar org/apache/hadoop/mapred/WordCount in out")
 
 #
 # print the mapreduce results, should show a table with word/counts
 #
-os.system("hdfs dfs -cat output/part-00000")
+os.system("hdfs dfs -cat out/part-00000")
 
 #
 # open hadoop monitoring system

@@ -10,10 +10,10 @@ os.system("echo 'start wordcount python example...'")
 os.system("sleep 2")
 
 #
-# delete directory in and output
+# delete in and out directory from hdfs
 #
 os.system("hdfs dfs -rm -r in")
-os.system("hdfs dfs -rm -r output")
+os.system("hdfs dfs -rm -r out")
 
 #
 # create the in directory in the hdfs path
@@ -28,12 +28,12 @@ os.system("hdfs dfs -copyFromLocal data/4300.txt in")
 #
 # run purchase example
 #
-os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file src/mapper_wordcount.py -mapper src/mapper_wordcount.py -file src/reducer_wordcount.py -reducer src/reducer_wordcount.py -input in -output output")
+os.system("hadoop jar $HADOOP_HOME/libexec/share/hadoop/tools/lib/hadoop-streaming-2.3.0.jar -file src/mapper_wordcount.py -mapper src/mapper_wordcount.py -file src/reducer_wordcount.py -reducer src/reducer_wordcount.py -input in -output out")
 
 #
 # print the mapreduce results, should show a table with word/counts
 #
-os.system("hdfs dfs -cat output/part-00000 | tail -10")
+os.system("hdfs dfs -cat out/part-00000 | tail -10")
 
 #
 # open hadoop monitoring system
