@@ -11,7 +11,7 @@ HDFS_PATH=/Users/geraldstanje/Documents/ # existing path
 HDFS_DIR=hdfstmp # name of the hdfs to be created in HDFS_PATH
 
 echo "Install hadoop..."
-echo "System sleep 2"
+sleep 2
 
 #
 # install hadoop using brew 
@@ -26,12 +26,8 @@ HADOOP_VERSION=`ls $HADOOP`
 HADOOP_HOME=$HADOOP$HADOOP_VERSION
 JAVA_HOME=`/usr/libexec/java_home`
 
-#echo `sh -c export JAVA_HOME`
-#echo `sh -c export HADOOP_HOME=$HADOOP_HOME`
-#echo `sh -c export HADOOP_VERSION=$HADOOP_VERSION`
-
 if ! grep "HADOOP" ~/.profile > /dev/null ; then
-	echo "Set HADOOP variables in ~/.bashrc"
+	echo "Set hadoop variables in ~/.profile"
 	sudo sh -c "echo export JAVA_HOME=$JAVA_HOME >> ~/.profile"
 	sudo sh -c "echo export HADOOP_HOME=$HADOOP_HOME >> ~/.profile"
 	sudo sh -c "echo export HADOOP_VERSION=$HADOOP_VERSION >> ~/.profile"
