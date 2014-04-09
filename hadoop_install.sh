@@ -1,21 +1,43 @@
 #!/bin/sh
 
+#
+# call the script via . hadoop_install.sh or source hadoop_install.sh
+#
+
+# 
+# this two variables need to be specified before running the script
+#
 HDFS_PATH=/Users/geraldstanje/Documents/ # existing path
-HDFS_DIR=hdfstmp # creates a new directory called $HDFS_DIR
+HDFS_DIR=hdfstmp # name of the hdfs to be created in HDFS_PATH
 
 echo "Install hadoop..."
 echo "System sleep 2"
 
+#
+# install hadoop using brew 
+#
 echo `brew install hadoop`
 HADOOP=/usr/local/Cellar/hadoop/
+
+# 
+# set env vars in current shell and write it to ~/.profile
+#
 HADOOP_VERSION=`ls $HADOOP`
+HADOOP_HOME=$HADOOP$HADOOP_VERSION
+JAVA_HOME=`/usr/libexec/java_home`
 
-sh -c export HADOOP_HOME=$HADOOP$HADOOP_VERSION
-sh -c export JAVA_HOME=`/usr/libexec/java_home`
+#echo `sh -c export JAVA_HOME`
+#echo `sh -c export HADOOP_HOME=$HADOOP_HOME`
+#echo `sh -c export HADOOP_VERSION=$HADOOP_VERSION`
 
-######TODO look for & replace vars in .profile
-#sh -c 'echo export JAVA_HOME=$HADOOP_HOME >> ~/.profile'
-#sh -c 'echo export HADOOP_HOME=$HADOOP_HOME >> ~/.profile'
+if ! grep "HADOOP" ~/.profile > /dev/null ; then
+	echo "Set HADOOP variables in ~/.bashrc"
+	sudo sh -c "echo export JAVA_HOME=$JAVA_HOME >> ~/.profile"
+	sudo sh -c "echo export HADOOP_HOME=$HADOOP_HOME >> ~/.profile"
+	sudo sh -c "echo export HADOOP_VERSION=$HADOOP_VERSION >> ~/.profile"
+fi
+
+source ~/.profile
 
 #
 # create hdfs dir
@@ -59,6 +81,7 @@ while (( ${#myarray[@]} > i )); do
     ((++i))
 done
 
+# move file to HADOOP directory
 mv tmp.xml $HADOOP_HOME/libexec/etc/hadoop/hdfs-site.xml
 
 #
