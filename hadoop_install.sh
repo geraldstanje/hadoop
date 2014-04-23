@@ -5,7 +5,7 @@
 #
 
 # 
-# this two variables need to be specified before running the script
+# these two variables need to be specified before running the script
 #
 HDFS_PATH=/Users/geraldstanje/Documents/ # existing path
 HDFS_DIR=hdfstmp # name of the hdfs to be created in HDFS_PATH
